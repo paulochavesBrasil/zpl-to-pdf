@@ -1,34 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Conversor ZPL</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversor ZPL</title>
 
-    <!-- Código do Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7148116003437794" crossorigin="anonymous"></script>
+  <!-- Código do Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7148116003437794"
+    crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
-
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@^19.1.0",
-        "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
-        "react/": "https://esm.sh/react@^19.1.0/"
-      }
-    }
-    </script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+    />
   </head>
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f2f5;
+        color: #333;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .container {
+        background-color: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 90%;
+        max-width: 500px;
+        transition: transform 0.3s ease-out;
+      }
+
+      .container:hover {
+        transform: translateY(-5px);
+      }
+
+      h1 {
+        color: #1a73e8; /* Primary Blue */
+        margin-bottom: 25px;
+        font-weight: 500;
+      }
+
+      .file-input-area {
+        margin-bottom: 25px;
+        padding: 30px; /* Increased padding */
+        border: 2px dashed #1a73e8; /* Primary Blue */
+        border-radius: 8px;
+        background-color: #e8f0fe; /* Light Blue */
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .file-input-area:hover {
+        background-color: #d6e4fd; /* Slightly Darker Light Blue */
+      }
+
+      .file-input-area input[type="file"] {
+        display: none;
+      }
+
+      .file-input-label-text {
+        margin: 0;
+        color: #1a73e8; /* Primary Blue */
+        font-weight: 500;
+      }
+       .file-input-label-text .material-icons { /* For potential icon */
+        vertical-align: middle;
+        margin-right: 8px;
+        font-size: 24px;
+      }
+
+
+      .file-name {
+        margin-top: 10px;
+        font-style: italic;
+        color: #555;
+        font-size: 0.9em;
+      }
+
+
+      button {
+        background-color: #1a73e8; /* Primary Blue */
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      button .material-icons { /* For potential icon */
+        margin-right: 8px;
+      }
+
+
+      button:hover:not(:disabled) {
+        background-color: #155ab6; /* Darker Blue */
+        transform: translateY(-2px);
+      }
+
+      button:disabled {
+        background-color: #a0c3ff; /* Lighter, disabled blue */
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .status-message {
+        margin-top: 20px;
+        font-size: 14px;
+        min-height: 20px; /* Reserve space */
+      }
+
+      .status-message.error {
+        color: #d93025; /* Error Red */
+        font-weight: 500;
+      }
+
+      .status-message.success {
+        color: #1e8e3e; /* Success Green */
+        font-weight: 500;
+      }
+
+      .loader {
+        border: 4px solid #f3f3f3; /* Light Grey */
+        border-top: 4px solid #1a73e8; /* Primary Blue */
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto 0;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Dark mode styles */
+      body.dark-mode {
+        background-color: #121212;
+        color: #e0e0e0;
+      }
+
+      .dark-mode .container {
+        background-color: #1e1e1e;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      .dark-mode h1 {
+        color: #bb86fc; /* Primary Purple (Dark Mode) */
+      }
+
+      .dark-mode .file-input-area {
+        border-color: #bb86fc; /* Primary Purple (Dark Mode) */
+        background-color: #2c2c2c;
+      }
+       .dark-mode .file-input-area:hover {
+        background-color: #3a3a3a;
+      }
+
+      .dark-mode .file-input-label-text {
+        color: #bb86fc; /* Primary Purple (Dark Mode) */
+      }
+      .dark-mode .file-name {
+        color: #aaa;
+      }
+
+
+      .dark-mode button {
+        background-color: #bb86fc; /* Primary Purple (Dark Mode) */
+        color: #121212; /* Dark text on purple button */
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .dark-mode button:hover:not(:disabled) {
+        background-color: #a062f0; /* Darker Purple */
+      }
+
+      .dark-mode button:disabled {
+        background-color: #5a4b70; /* Lighter, disabled purple */
+        color: #888;
+      }
+
+      .dark-mode .status-message.error {
+        color: #cf6679; /* Error Red (Dark Mode) */
+      }
+
+      .dark-mode .status-message.success {
+        color: #03dac6; /* Success Teal (Dark Mode) */
+      }
+      .dark-mode .loader {
+        border-top-color: #bb86fc; /* Primary Purple (Dark Mode) */
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: 1px solid #ccc;
+        color: #333;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px; /* Smaller font for toggle */
+      }
+      .dark-mode .theme-toggle {
+        border-color: #555;
+        color: #e0e0e0;
+      }
+
+      /* For potential icons if added later */
+      /* @import url('https://fonts.googleapis.com/icon?family=Material+Icons'); */
+
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
+</head>
+<link rel="stylesheet" href="index.css">
   <body>
     <div id="root"></div>
-
-    <!-- Bibliotecas externas -->
+    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- pako for zlib (if needed for complex Z64 decoding, Labelary might handle it) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <!-- JSZip for .zip file processing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
-    <!-- Seu código -->
     <script type="module" src="./index.tsx"></script>
-  </body>
+    
+</body>
 </html>
+
