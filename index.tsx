@@ -2,6 +2,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
+// Adiciona o script do Google AdSense dinamicamente
+const script = document.createElement("script");
+script.async = true;
+script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7148116003437794";
+script.crossOrigin = "anonymous";
+document.head.appendChild(script);
+
 // Declare global properties for libraries loaded via script tags
 declare global {
   interface Window {
